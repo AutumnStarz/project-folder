@@ -12,9 +12,7 @@ const loadPlaces = () => {
         const entity = document.createElement("a-entity");
 
         entity.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude}`);
-        //entity.setAttribute("geometry", "primitive: sphere; radius: 1");
-        entity.setAttribute("material", "color: blue");
-
+        <a-sphere position="0 0.5 0" radius="0.5" color="blue"></a-sphere>
         const text = document.createElement("a-text");
         text.setAttribute("value", place.name);
         text.setAttribute("align", "center");
