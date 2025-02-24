@@ -12,7 +12,7 @@ const loadPlaces = () => {
         const entity = document.createElement("a-entity");
 
         entity.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude}`);
-        entity.setAttribute("geometry", "primitive: sphere; radius: 1");
+        //entity.setAttribute("geometry", "primitive: sphere; radius: 1");
         entity.setAttribute("material", "color: blue");
 
         const text = document.createElement("a-text");
@@ -27,11 +27,4 @@ const loadPlaces = () => {
     });
 };
 
-window.addEventListener('load', () => {
-    const scene = document.querySelector("a-scene");
-    if (scene.hasLoaded) {
-        loadPlaces();
-    } else {
-        scene.addEventListener('loaded', loadPlaces);
-    }
-});
+window.onload = loadPlaces;
