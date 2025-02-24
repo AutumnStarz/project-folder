@@ -9,11 +9,8 @@ const loadPlaces = () => {
     const scene = document.querySelector("a-scene");
 
     places.forEach(place => {
-        const entity = document.createElement("a-entity");
-
-        entity.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude}`);
-        entity.setAttribute("geometry", "primitive: sphere; radius: 1");
-        entity.setAttribute("material", "color: blue");
+        const shape = document.createElement("a-sphere");
+        shape.setAttribute("color", "#FF0000");
 
         const text = document.createElement("a-text");
         text.setAttribute("value", place.name);
