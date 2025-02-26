@@ -1,20 +1,43 @@
-// For testing puroposes, you may need to change these places to something closer to you
-const places = [
-    { name: "Rochester Abandoned Subway", latitude: 43.154722, longitude: -77.609722 },
-    { name: "Washington Square Park", latitude: 43.1534, longitude: -77.6053 },
-    { name: "Rochester Contemporary Art Center", latitude: 43.156619, longitude: -77.600730 },
-    { name: "Test", latitude: 43.0918421, longitude: -77.6631907 }
-];
+const fetchPlacesFromOSM = async (latitude, longitude) => {
+    // For testing puroposes, you may need to increase the radius and/or change the API query
+    // For example, you can try "amenity"="cafe"
+    const radius = 100000; // radius in meters
+    const query = `
+        [out:json];
+        node["historic"="monument"](around:${radius},${latitude},${longitude});
+        out;
+    `;
 
-const loadPlaces = () => {
+    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch POIs from OpenStreetMap");
+
+        const data = await response.json();
+
+        const places = data.elements.map(el => ({
+            name: el.tags.name || "Unknown Attraction",
+            latitude: el.lat,
+            longitude: el.lon
+        }));
+
+        loadPlaces(places);
+    } catch (error) {
+        console.error("Error fetching POIs:", error);
+        alert("Failed to load POIs. Please try again.");
+    }
+};
+
+const loadPlaces = (places) => {
     const scene = document.querySelector("a-scene");
 
     places.forEach(place => {
         const entity = document.createElement("a-entity");
 
         entity.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude}`);
-        entity.setAttribute("geometry", "primitive: sphere; radius: 1");
-        entity.setAttribute("material", "color: red");
+        entity.setAttribute("geometry", "primitive: sphere");
+        entity.setAttribute("material", "color: blue");
 
         const text = document.createElement("a-text");
         text.setAttribute("value", place.name);
@@ -28,4 +51,15 @@ const loadPlaces = () => {
     });
 };
 
-window.onload = loadPlaces;
+window.onload = () => {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude, longitude } = position.coords;
+            fetchPlacesFromOSM(latitude, longitude);
+        },
+        (error) => {
+            console.error("Geolocation error:", error);
+            alert("Failed to get location. Please enable location services.");
+        }
+    );
+};
