@@ -1,23 +1,20 @@
 // For testing puroposes, you may need to change these places to something closer to you
 const places = [
-    //{ name: "Rochester Abandoned Subway", latitude: 43.154722, longitude: -77.609722 },
-    //{ name: "Washington Square Park", latitude: 43.1534, longitude: -77.6053 },
-    //{ name: "Rochester Contemporary Art Center", latitude: 43.156619, longitude: -77.600730 },
-    { name: "Here", latitude: 43.0838624, longitude: -77.6763894 }
+    { name: "Rochester Abandoned Subway", latitude: 43.154722, longitude: -77.609722 },
+    { name: "Washington Square Park", latitude: 43.1534, longitude: -77.6053 },
+    { name: "Rochester Contemporary Art Center", latitude: 43.156619, longitude: -77.600730 },
+    { name: "Test", latitude: 43.0918421, longitude: -77.6631907 }
 ];
 
 const loadPlaces = () => {
     const scene = document.querySelector("a-scene");
 
     places.forEach(place => {
-        const shape = document.createElement("a-sphere");
-        shape.setAttribute("color", "#FF0000");
-        shape.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude};`);
-        shape.setAttribute("radius", "1");
-        shape.setAttribute("position", "0 0 0");
-
         const entity = document.createElement("a-entity");
-        entity.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude};`);
+
+        entity.setAttribute("gps-entity-place", `latitude: ${place.latitude}; longitude: ${place.longitude}`);
+        entity.setAttribute("geometry", "primitive: sphere; radius: 1");
+        entity.setAttribute("material", "color: blue");
 
         const text = document.createElement("a-text");
         text.setAttribute("value", place.name);
